@@ -112,7 +112,7 @@
 
     var loadChat = function(cb) {
         if (!cb) cb = function() {};
-        $.get('https://rawgit.com/basicBot/source/master/lang/langIndex.json', function(json) {
+        $.get('https://github.com/e-simScripts/mod-of-basicbot-for-plug.dj/tree/master/lang/langIndex.json', function(json) {
             var link = basicBot.chatLink;
             if (json !== null && typeof json !== 'undefined') {
                 langIndex = json;
@@ -250,18 +250,18 @@
         status: false,
         name: 'basicBot',
         loggedInID: null,
-        scriptLink: 'https://rawgit.com/basicBot/source/master/basicBot.js',
+        scriptLink: 'https://raw.githubusercontent.com/e-simScripts/mod-of-basicbot-for-plug.dj/master/basicBot.js',
         cmdLink: 'http://git.io/245Ppg',
-        chatLink: 'https://rawgit.com/basicBot/source/master/lang/en.json',
+        chatLink: 'https://raw.githubusercontent.com/e-simScripts/mod-of-basicbot-for-plug.dj/master/lang/lt.json',
         chat: null,
         loadChat: loadChat,
         retrieveSettings: retrieveSettings,
         retrieveFromStorage: retrieveFromStorage,
         settings: {
             botName: 'basicBot',
-            language: 'english',
-            chatLink: 'https://rawgit.com/basicBot/source/master/lang/en.json',
-            scriptLink: 'https://rawgit.com/basicBot/source/master/basicBot.js',
+            language: 'lithuanian',
+            chatLink: 'https://raw.githubusercontent.com/e-simScripts/mod-of-basicbot-for-plug.dj/master/lang/lt.json',
+            scriptLink: 'https://raw.githubusercontent.com/e-simScripts/mod-of-basicbot-for-plug.dj/master/basicBot.js',
             roomLock: false, // Requires an extension to re-load the script
             startupCap: 1, // 1-200
             startupVolume: 0, // 0-100
@@ -2745,7 +2745,7 @@
                         }));
                         var argument = msg.substring(cmd.length + 1);
 
-                        $.get('https://rawgit.com/basicBot/source/master/lang/langIndex.json', function(json) {
+                        $.get('https://raw.githubusercontent.com/e-simScripts/mod-of-basicbot-for-plug.dj/master/lang/langIndex.json', function(json) {
                             var langIndex = json;
                             var link = langIndex[argument.toLowerCase()];
                             if (typeof link === 'undefined') {
