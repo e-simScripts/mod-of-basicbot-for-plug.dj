@@ -9,10 +9,6 @@
 
 (function() {
 
-    /*window.onerror = function() {
-        var room = JSON.parse(localStorage.getItem('basicBotRoom'));
-        window.location = 'https://plug.dj' + room.name;
-    };*/
 
     API.getWaitListPosition = function(id) {
         if (typeof id === 'undefined' || id === null) {
@@ -33,57 +29,6 @@
         basicBot.status = false;
     };
 
-    // This socket server is used solely for statistical and troubleshooting purposes.
-    // This server may not always be up, but will be used to get live data at any given time.
-
-    /*
-    var socket = function() {
-        function loadSocket() {
-            SockJS.prototype.msg = function(a) {
-                this.send(JSON.stringify(a))
-            };
-            sock = new SockJS('https://benzi.io:4964/socket');
-            sock.onopen = function() {
-                console.log('Connected to socket!');
-                sendToSocket();
-            };
-            sock.onclose = function() {
-                console.log('Disconnected from socket, reconnecting every minute ..');
-                var reconnect = setTimeout(function() {
-                    loadSocket()
-                }, 60 * 1000);
-            };
-            sock.onmessage = function(broadcast) {
-                var rawBroadcast = broadcast.data;
-                var broadcastMessage = rawBroadcast.replace(/["\\]+/g, '');
-                API.chatLog(broadcastMessage);
-                console.log(broadcastMessage);
-            };
-        }
-        if (typeof SockJS == 'undefined') {
-            $.getScript('https://cdn.jsdelivr.net/sockjs/1.0.3/sockjs.min.js', loadSocket);
-        } else loadSocket();
-    }
-
-    var sendToSocket = function() {
-        var basicBotSettings = basicBot.settings;
-        var basicBotRoom = basicBot.room;
-        var basicBotInfo = {
-            time: Date.now(),
-            version: basicBot.version
-        };
-        var data = {
-            users: API.getUsers(),
-            userinfo: API.getUser(),
-            room: location.pathname,
-            basicBotSettings: basicBotSettings,
-            basicBotRoom: basicBotRoom,
-            basicBotInfo: basicBotInfo
-        };
-        return sock.msg(data);
-    };
-    */
-
     var storeToStorage = function() {
         localStorage.setItem('basicBotsettings', JSON.stringify(basicBot.settings));
         localStorage.setItem('basicBotRoom', JSON.stringify(basicBot.room));
@@ -101,7 +46,6 @@
             console.log('There is a chat text missing.');
             return '[Error] No text message found.';
 
-            // TODO: Get missing chat messages from source.
         }
         var lit = '%%';
         for (var prop in obj) {
@@ -168,7 +112,6 @@
                 basicBot.room.afkList = room.afkList;
                 basicBot.room.historyList = room.historyList;
                 basicBot.room.mutedUsers = room.mutedUsers;
-                //basicBot.room.autoskip = room.autoskip;
                 basicBot.room.roomstats = room.roomstats;
                 basicBot.room.messages = room.messages;
                 basicBot.room.queue = room.queue;
@@ -1236,16 +1179,7 @@
                 if (basicBot.settings.cmdDeletion && msg.startsWith(basicBot.settings.commandLiteral)) {
                     API.moderateDeleteChat(chat.cid);
                 }
-                /**
-                 var plugRoomLinkPatt = /(\bhttps?:\/\/(www.)?plug\.dj[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-                 if (plugRoomLinkPatt.exec(msg)) {
-                    if (perm === API.ROLE.NONE) {
-                        API.sendChat(subChat(basicBot.chat.roomadvertising, {name: chat.un}));
-                        API.moderateDeleteChat(chat.cid);
-                        return true;
-                    }
-                }
-                 **/
+                
                 if (msg.indexOf('http://adf.ly/') > -1) {
                     API.moderateDeleteChat(chat.cid);
                     API.sendChat(subChat(basicBot.chat.adfly, {
@@ -1323,14 +1257,7 @@
                     }, basicBot.settings.commandCooldown * 1000);
                 }
                 if (executed) {
-                    /*if (basicBot.settings.cmdDeletion) {
-                        API.moderateDeleteChat(chat.cid);
-                    }*/
-
-                    //basicBot.room.allcommand = false;
-                    //setTimeout(function () {
                     basicBot.room.allcommand = true;
-                    //}, 5 * 1000);
                 }
                 return executed;
             },
@@ -1549,21 +1476,6 @@
                 return perm >= minPerm;
 
             },
-
-            /*
-            command: {
-                command: 'cmd',
-                rank: 'user/bouncer/mod/manager',
-                type: 'startsWith/exact',
-                functionality: function(chat, cmd) {
-                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void(0);
-                    if (!basicBot.commands.executable(this.rank, chat)) return void(0);
-                    else {
-
-                    }
-                }
-            },
-            */
 
             activeCommand: {
                 command: 'active',
@@ -2216,53 +2128,6 @@
                     }
                 }
             },
-
-            /*
-            // This does not work anymore.
-            deletechatCommand: {
-                command: 'deletechat',
-                rank: 'mod',
-                type: 'startsWith',
-                functionality: function (chat, cmd) {
-                    if (this.type === 'exact' && chat.message.length !== cmd.length) return void (0);
-                    if (!basicBot.commands.executable(this.rank, chat)) return void (0);
-                    else {
-                        var msg = chat.message;
-                        if (msg.length === cmd.length) return API.sendChat(subChat(basicBot.chat.nouserspecified, {name: chat.un}));
-                        var name = msg.substring(cmd.length + 2);
-                        var user = basicBot.userUtilities.lookupUserName(name);
-                        if (typeof user === 'boolean') return API.sendChat(subChat(basicBot.chat.invaliduserspecified, {name: chat.un}));
-                        var chats = $('.from');
-                        var message = $('.message');
-                        var emote = $('.emote');
-                        var from = $('.un.clickable');
-                        for (var i = 0; i < chats.length; i++) {
-                            var n = from[i].textContent;
-                            if (name.trim() === n.trim()) {
-
-                                // var messagecid = $(message)[i].getAttribute('data-cid');
-                                // var emotecid = $(emote)[i].getAttribute('data-cid');
-                                // API.moderateDeleteChat(messagecid);
-
-                                // try {
-                                //     API.moderateDeleteChat(messagecid);
-                                // }
-                                // finally {
-                                //     API.moderateDeleteChat(emotecid);
-                                // }
-
-                                if (typeof $(message)[i].getAttribute('data-cid') == 'undefined'){
-                                    API.moderateDeleteChat($(emote)[i].getAttribute('data-cid')); // works well with normal messages but not with emotes due to emotes and messages are seperate.
-                                } else {
-                                    API.moderateDeleteChat($(message)[i].getAttribute('data-cid'));
-                                }
-                            }
-                        }
-                        API.sendChat(subChat(basicBot.chat.deletechat, {name: chat.un, username: name}));
-                    }
-                }
-            },
-            */
 
             deletechatCommand: {
                 command: 'deletechat',
@@ -3548,21 +3413,6 @@
                         msg += subChat(basicBot.chat.activefor, {
                             time: since
                         });
-
-                        /*
-                        // least efficient way to go about this, but it works :)
-                        if (msg.length > 250){
-                            firstpart = msg.substr(0, 250);
-                            secondpart = msg.substr(250);
-                            API.sendChat(firstpart);
-                            setTimeout(function () {
-                                API.sendChat(secondpart);
-                            }, 300);
-                        }
-                        else {
-                            API.sendChat(msg);
-                        }
-                        */
 
                         // This is a more efficient solution
                         if (msg.length > 250) {
