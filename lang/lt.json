@@ -65,7 +65,7 @@
     "bouncer": "Botas negali perkelti \u017emoni\u0173, kai jis nustatytas bouncer rangu.",
     "online": "\/me %%BOTNAME%% v%%VERSION%% \u012fjungtas.",
     "welcome": "\/me Labas, @%%NAME%%",
-    "welcomeback": "\/me D\u017eiugu, jog gr\u012f\u017eai %%NAME%%.",
+    "welcomeback": "\/me D\u017eiugu, jog gr\u012f\u017eai @%%NAME%%.",
     "songknown": "\/me @%%NAME%%, \u0161\u012f dain\u0105 yra DJ istorijoje.",
     "notavailable": "\/me @%%NAME%%, daina kuri\u0105 bandei paleisti n\u0117ra prieinama.",
     "timelimit": "\/me @%%NAME%%, tavo daina yra ilgesn\u0117 negu %%MAXLENGTH%% minut\u0117s, tau reikia privilegij\u0173 kad gal\u0117tum leisti ilgesnes dainas.",
